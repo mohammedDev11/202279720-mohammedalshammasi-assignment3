@@ -1,132 +1,516 @@
-// Greeting
-(function () {
-  const el = document.getElementById("greeting");
+// ============================
+// Assignment 3 - Advanced Functionality
+// ============================
+
+document.addEventListener("DOMContentLoaded", () => {
+  setGreeting();
+  themeManager();
+  visitorManager();
+  siteTimer();
+  projectManager();
+  githubRepoManager();
+  handleContactForm();
+  revealOnScroll();
+
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+});
+
+// ============================
+// 1) Greeting message by time of day
+// ============================
+function setGreeting() {
+  const greetingEl = document.getElementById("greeting");
+  if (!greetingEl) return;
+
   const hour = new Date().getHours();
-  el.textContent =
-    hour < 12 ? "Good Morning" :
-    hour < 18 ? "Good Afternoon" :
-    "Good Evening";
-})();
+  let message = "Welcome!";
 
-// Theme
-(function () {
-  const btn = document.getElementById("themeToggle");
+  if (hour >= 5 && hour < 12) {
+    message = "Good morning";
+  } else if (hour >= 12 && hour < 17) {
+    message = "Good afternoon";
+  } else if (hour >= 17 && hour < 22) {
+    message = "Good evening";
+  } else {
+    message = "Hope you’re having a calm night 🌌";
+  }
+
+  greetingEl.textContent = message;
+}
+
+// ============================
+// 2) Dark / Light theme with localStorage
+// ============================
+function themeManager() {
   const body = document.body;
+  const toggleBtn = document.getElementById("themeToggle");
 
-  const saved = localStorage.getItem("theme");
-  if (saved === "light") body.classList.add("light");
+  if (!toggleBtn) return;
 
-  btn.onclick = () => {
-    body.classList.toggle("light");
-    localStorage.setItem("theme",
-      body.classList.contains("light") ? "light" : "dark"
-    );
-  };
-})();
+  const savedTheme = localStorage.getItem("theme");
+  const isSavedLight = savedTheme === "light";
 
-// Save Name (STATE)
-(function () {
-  const input = document.getElementById("visitorName");
-  const btn = document.getElementById("saveName");
-  const display = document.getElementById("welcomeUser");
+  if (isSavedLight) {
+    body.classList.add("light-theme");
+  } else {
+    body.classList.remove("light-theme");
+  }
 
-  const saved = localStorage.getItem("username");
-  if (saved) display.textContent = "Welcome " + saved;
+  updateThemeUI();
 
-  btn.onclick = () => {
-    const name = input.value.trim();
-    if (name) {
-      localStorage.setItem("username", name);
-      display.textContent = "Welcome " + name;
+  toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("light-theme");
+
+    const isLight = body.classList.contains("light-theme");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+
+    updateThemeUI();
+  });
+
+  function updateThemeUI() {
+    const isLight = body.classList.contains("light-theme");
+    const themeLabel = document.getElementById("themeLabel");
+    const themeStatusText = document.getElementById("themeStatusText");
+
+    toggleBtn.innerHTML = isLight
+      ? '<i data-lucide="sun"></i><span id="themeLabel">Light Mode</span>'
+      : '<i data-lucide="moon"></i><span id="themeLabel">Dark Mode</span>';
+
+    if (themeLabel) {
+      themeLabel.textContent = isLight ? "Light Mode" : "Dark Mode";
     }
-  };
-})();
 
-// Timer (COMPLEX LOGIC)
-(function () {
-  const timer = document.getElementById("timer");
-  let seconds = 0;
+    if (themeStatusText) {
+      themeStatusText.textContent = isLight ? "Light" : "Dark";
+    }
 
-  setInterval(() => {
-    seconds++;
-    timer.textContent = "Time on site: " + seconds + "s";
-  }, 1000);
-})();
-
-// Filter + Sort
-(function () {
-  const filter = document.getElementById("categoryFilter");
-  const sort = document.getElementById("sortProjects");
-  const grid = document.getElementById("projectsGrid");
-
-  filter.onchange = apply;
-  sort.onchange = apply;
-
-  function apply() {
-    let projects = [...grid.children];
-
-    // Filter
-    projects.forEach(p => {
-      p.style.display =
-        filter.value === "all" || p.dataset.category === filter.value
-          ? "block"
-          : "none";
-    });
-
-    // Sort
-    if (sort.value === "title") {
-      projects.sort((a, b) =>
-        a.textContent.localeCompare(b.textContent)
-      );
-      projects.forEach(p => grid.appendChild(p));
+    if (window.lucide) {
+      lucide.createIcons();
     }
   }
-})();
+}
 
-// GitHub API
-(async function () {
-  const container = document.getElementById("repoList");
+// ============================
+// 3) Visitor name state management
+// ============================
+function visitorManager() {
+  const visitorInput = document.getElementById("visitorName");
+  const saveBtn = document.getElementById("saveVisitorBtn");
+  const clearBtn = document.getElementById("clearVisitorBtn");
+  const visitorMessage = document.getElementById("visitorMessage");
 
-  try {
-    const res = await fetch("https://api.github.com/users/mohammedDev11/repos");
-    const data = await res.json();
+  if (!visitorInput || !saveBtn || !clearBtn || !visitorMessage) return;
 
-    container.innerHTML = "";
+  const savedVisitorName = localStorage.getItem("visitorName");
 
-    data.slice(0, 5).forEach(repo => {
-      const div = document.createElement("div");
-      div.innerHTML = `<a href="${repo.html_url}" target="_blank">${repo.name}</a>`;
-      container.appendChild(div);
-    });
-
-  } catch {
-    container.textContent = "Failed to load GitHub repos.";
+  if (savedVisitorName) {
+    visitorInput.value = savedVisitorName;
+    visitorMessage.textContent = `Welcome back, ${savedVisitorName}! Your name was remembered.`;
   }
-})();
 
-// Form validation
-(function () {
-  const form = document.getElementById("contactForm");
-  const status = document.getElementById("formStatus");
+  saveBtn.addEventListener("click", () => {
+    const name = visitorInput.value.trim();
 
-  form.onsubmit = (e) => {
-    e.preventDefault();
-
-    let valid = true;
-
-    const name = document.getElementById("name");
-    const email = document.getElementById("email");
-    const message = document.getElementById("message");
-
-    if (!name.value) valid = false;
-    if (!email.value.includes("@")) valid = false;
-    if (message.value.length < 5) valid = false;
-
-    if (!valid) {
-      status.textContent = "Fix errors";
+    if (name.length < 2) {
+      visitorMessage.textContent = "Please enter a valid name with at least 2 characters.";
       return;
     }
 
-    status.textContent = "Message sent (demo)";
-  };
-})();
+    localStorage.setItem("visitorName", name);
+    visitorMessage.textContent = `Nice to meet you, ${name}! Your name has been saved.`;
+  });
+
+  clearBtn.addEventListener("click", () => {
+    localStorage.removeItem("visitorName");
+    visitorInput.value = "";
+    visitorMessage.textContent = "Saved name cleared successfully.";
+  });
+}
+
+// ============================
+// 4) Time on site counter
+// ============================
+function siteTimer() {
+  const timeCounter = document.getElementById("timeCounter");
+  if (!timeCounter) return;
+
+  let secondsOnSite = 0;
+
+  setInterval(() => {
+    secondsOnSite += 1;
+    timeCounter.textContent = formatTime(secondsOnSite);
+  }, 1000);
+
+  function formatTime(totalSeconds) {
+    if (totalSeconds < 60) {
+      return `${totalSeconds}s`;
+    }
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    if (minutes < 60) {
+      return `${minutes}m ${seconds}s`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    return `${hours}h ${remainingMinutes}m ${seconds}s`;
+  }
+}
+
+// ============================
+// 5) Project filter + sort + conditional level logic
+// ============================
+function projectManager() {
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  const projectsGrid = document.getElementById("projectsGrid");
+  const sortSelect = document.getElementById("sortProjects");
+  const levelSelect = document.getElementById("skillLevel");
+  const filterStatus = document.getElementById("filterStatus");
+  const emptyState = document.getElementById("emptyState");
+
+  if (
+    !filterButtons.length ||
+    !projectsGrid ||
+    !sortSelect ||
+    !levelSelect ||
+    !filterStatus ||
+    !emptyState
+  ) {
+    return;
+  }
+
+  let currentFilter = localStorage.getItem("projectFilter") || "all";
+  let currentSort = localStorage.getItem("projectSort") || "default";
+  let currentLevel = localStorage.getItem("projectLevel") || "all";
+
+  sortSelect.value = currentSort;
+  levelSelect.value = currentLevel;
+
+  filterButtons.forEach((button) => {
+    if (button.dataset.filter === currentFilter) {
+      button.classList.add("active");
+    } else {
+      button.classList.remove("active");
+    }
+
+    button.addEventListener("click", () => {
+      currentFilter = button.dataset.filter;
+      localStorage.setItem("projectFilter", currentFilter);
+
+      filterButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      applyProjectLogic();
+    });
+  });
+
+  sortSelect.addEventListener("change", () => {
+    currentSort = sortSelect.value;
+    localStorage.setItem("projectSort", currentSort);
+    applyProjectLogic();
+  });
+
+  levelSelect.addEventListener("change", () => {
+    currentLevel = levelSelect.value;
+    localStorage.setItem("projectLevel", currentLevel);
+    applyProjectLogic();
+  });
+
+  applyProjectLogic();
+
+  function applyProjectLogic() {
+    const projectCards = Array.from(projectsGrid.querySelectorAll(".project-card"));
+
+    const sortedCards = [...projectCards];
+
+    if (currentSort === "title-asc") {
+      sortedCards.sort((a, b) =>
+        a.dataset.title.localeCompare(b.dataset.title)
+      );
+    } else if (currentSort === "title-desc") {
+      sortedCards.sort((a, b) =>
+        b.dataset.title.localeCompare(a.dataset.title)
+      );
+    }
+
+    sortedCards.forEach((card) => projectsGrid.appendChild(card));
+
+    let visibleCount = 0;
+
+    sortedCards.forEach((card) => {
+      const matchesCategory =
+        currentFilter === "all" || card.dataset.category === currentFilter;
+
+      const matchesLevel =
+        currentLevel === "all" || card.dataset.level === currentLevel;
+
+      if (matchesCategory && matchesLevel) {
+        card.classList.remove("hide-card");
+        visibleCount += 1;
+      } else {
+        card.classList.add("hide-card");
+      }
+    });
+
+    emptyState.classList.toggle("hidden", visibleCount !== 0);
+
+    const categoryText =
+      currentFilter === "all"
+        ? "all categories"
+        : `"${getCategoryLabel(currentFilter)}"`;
+
+    const levelText =
+      currentLevel === "all"
+        ? "all difficulty levels"
+        : `"${getLevelLabel(currentLevel)}"`;
+
+    const sortText =
+      currentSort === "default"
+        ? "default order"
+        : currentSort === "title-asc"
+        ? "title A-Z"
+        : "title Z-A";
+
+    filterStatus.textContent = `Showing ${visibleCount} project(s) for ${categoryText}, ${levelText}, sorted by ${sortText}.`;
+  }
+
+  function getCategoryLabel(category) {
+    if (category === "ui") return "UI";
+    if (category === "web") return "Web App";
+    if (category === "mobile") return "Mobile";
+    return category;
+  }
+
+  function getLevelLabel(level) {
+    if (level === "beginner") return "Beginner Friendly";
+    if (level === "advanced") return "Advanced Focus";
+    return level;
+  }
+}
+
+// ============================
+// 6) GitHub API integration
+// ============================
+function githubRepoManager() {
+  const repoList = document.getElementById("repoList");
+  const repoStatus = document.getElementById("repoStatus");
+  const reloadReposBtn = document.getElementById("reloadReposBtn");
+
+  if (!repoList || !repoStatus || !reloadReposBtn) return;
+
+  const githubUsername = "mohammedDev11";
+
+  async function loadRepositories() {
+    repoStatus.textContent = "Loading repositories...";
+    repoList.innerHTML = "";
+
+    try {
+      const response = await fetch(
+        `https://api.github.com/users/${githubUsername}/repos?sort=updated&per_page=6`
+      );
+
+      if (!response.ok) {
+        throw new Error("GitHub API request failed.");
+      }
+
+      const repositories = await response.json();
+
+      if (!Array.isArray(repositories) || repositories.length === 0) {
+        repoStatus.textContent = "No repositories were found.";
+        return;
+      }
+
+      repoStatus.textContent = "Live data loaded successfully from GitHub.";
+
+      repositories.forEach((repo) => {
+        const repoCard = document.createElement("article");
+        repoCard.className = "repo-card";
+
+        const description = repo.description
+          ? repo.description
+          : "No description provided for this repository.";
+
+        const language = repo.language ? repo.language : "Not specified";
+
+        repoCard.innerHTML = `
+          <div class="repo-card-header">
+            <h3 class="repo-name">
+              <a href="${repo.html_url}" target="_blank" rel="noopener">
+                ${repo.name}
+              </a>
+            </h3>
+            <span class="repo-visibility">${repo.visibility}</span>
+          </div>
+
+          <p class="repo-desc">${description}</p>
+
+          <div class="repo-meta">
+            <span>
+              <i data-lucide="code-2"></i>
+              ${language}
+            </span>
+            <span>
+              <i data-lucide="star"></i>
+              ${repo.stargazers_count}
+            </span>
+            <span>
+              <i data-lucide="git-fork"></i>
+              ${repo.forks_count}
+            </span>
+          </div>
+        `;
+
+        repoList.appendChild(repoCard);
+      });
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    } catch (error) {
+      repoStatus.textContent =
+        "Unable to load GitHub repositories right now. Please try again later.";
+      repoList.innerHTML = "";
+    }
+  }
+
+  reloadReposBtn.addEventListener("click", loadRepositories);
+
+  loadRepositories();
+}
+
+// ============================
+// 7) Contact form validation + extra checks
+// ============================
+function handleContactForm() {
+  const form = document.getElementById("contactForm");
+  const status = document.getElementById("formStatus");
+  const submitBtn = document.getElementById("submitBtn");
+
+  if (!form || !status || !submitBtn) return;
+
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const messageInput = document.getElementById("message");
+  const agreeTermsInput = document.getElementById("agreeTerms");
+
+  const nameError = document.getElementById("nameError");
+  const emailError = document.getElementById("emailError");
+  const messageError = document.getElementById("messageError");
+  const agreeTermsError = document.getElementById("agreeTermsError");
+
+  function setError(input, errorElement, message) {
+    if (input) {
+      input.classList.add("input-error");
+    }
+    errorElement.textContent = message;
+  }
+
+  function clearError(input, errorElement) {
+    if (input) {
+      input.classList.remove("input-error");
+    }
+    errorElement.textContent = "";
+  }
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    let isValid = true;
+
+    clearError(nameInput, nameError);
+    clearError(emailInput, emailError);
+    clearError(messageInput, messageError);
+    clearError(agreeTermsInput, agreeTermsError);
+
+    status.className = "form-status";
+    status.textContent = "";
+
+    const nameValue = nameInput.value.trim();
+    const emailValue = emailInput.value.trim();
+    const messageValue = messageInput.value.trim();
+    const wordsInMessage = messageValue.split(/\s+/).filter(Boolean).length;
+
+    if (nameValue === "") {
+      setError(nameInput, nameError, "Please enter your name.");
+      isValid = false;
+    } else if (nameValue.length < 2) {
+      setError(nameInput, nameError, "Name must be at least 2 characters.");
+      isValid = false;
+    }
+
+    if (emailValue === "") {
+      setError(emailInput, emailError, "Please enter your email.");
+      isValid = false;
+    } else if (!isValidEmail(emailValue)) {
+      setError(emailInput, emailError, "Please enter a valid email address.");
+      isValid = false;
+    }
+
+    if (messageValue === "") {
+      setError(messageInput, messageError, "Please enter your message.");
+      isValid = false;
+    } else if (messageValue.length < 15) {
+      setError(messageInput, messageError, "Message should be at least 15 characters.");
+      isValid = false;
+    } else if (wordsInMessage < 3) {
+      setError(messageInput, messageError, "Message should contain at least 3 words.");
+      isValid = false;
+    }
+
+    if (!agreeTermsInput.checked) {
+      setError(agreeTermsInput, agreeTermsError, "Please confirm the checkbox before submitting.");
+      isValid = false;
+    }
+
+    if (!isValid) {
+      status.classList.add("error");
+      status.textContent = "Please fix the highlighted fields and try again.";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    status.className = "form-status success";
+    status.textContent = "Sending message...";
+
+    setTimeout(() => {
+      status.className = "form-status success";
+      status.textContent =
+        "Message sent successfully! This is a demo form, so no backend is connected.";
+      form.reset();
+      submitBtn.disabled = false;
+    }, 1000);
+  });
+}
+
+// ============================
+// 8) Scroll reveal animation
+// ============================
+function revealOnScroll() {
+  const revealElements = document.querySelectorAll(".reveal");
+
+  if (!revealElements.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    },
+    {
+      threshold: 0.15
+    }
+  );
+
+  revealElements.forEach((element) => observer.observe(element));
+}
