@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mohammed Alshammasi | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="logo" href="#home">Mohammed</a>
+
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#github">GitHub</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <button id="themeToggle" class="theme-toggle">
+        <span id="themeLabel">Dark Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="hero container">
+    <h1>My Portfolio (Assignment 3)</h1>
+    <p id="greeting"></p>
+
+    <div class="visitor-box">
+      <input type="text" id="visitorName" placeholder="Enter your name">
+      <button id="saveName">Save</button>
+      <p id="welcomeUser"></p>
+    </div>
+
+    <p id="timer"></p>
+  </main>
+
+  <!-- Projects -->
+  <section id="projects" class="container">
+    <h2>Projects</h2>
+
+    <div>
+      <select id="categoryFilter">
+        <option value="all">All</option>
+        <option value="ui">UI</option>
+        <option value="web">Web</option>
+        <option value="mobile">Mobile</option>
+      </select>
+
+      <select id="sortProjects">
+        <option value="default">Default</option>
+        <option value="title">Sort by Title</option>
+      </select>
+    </div>
+
+    <div id="projectsGrid">
+      <div class="project" data-category="ui">UI Project</div>
+      <div class="project" data-category="web">Web App</div>
+      <div class="project" data-category="mobile">Mobile App</div>
+    </div>
+  </section>
+
+  <!-- GitHub API -->
+  <section id="github" class="container">
+    <h2>My GitHub Repositories</h2>
+    <div id="repoList">Loading...</div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="container">
+    <h2>Contact</h2>
+
+    <form id="contactForm">
+      <input id="name" placeholder="Name">
+      <small id="nameError"></small>
+
+      <input id="email" placeholder="Email">
+      <small id="emailError"></small>
+
+      <textarea id="message" placeholder="Message"></textarea>
+      <small id="messageError"></small>
+
+      <button type="submit">Send</button>
+      <p id="formStatus"></p>
+    </form>
+  </section>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
