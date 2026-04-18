@@ -10,88 +10,455 @@
 </head>
 
 <body>
-  <!-- Navbar -->
+  <!-- ===== Navbar ===== -->
   <header class="navbar">
     <div class="container nav-inner">
       <a class="logo" href="#home">Mohammed</a>
 
       <nav class="nav-links">
         <a href="#about">About</a>
+        <a href="#highlights">Why Me</a>
         <a href="#projects">Projects</a>
         <a href="#github">GitHub</a>
         <a href="#contact">Contact</a>
       </nav>
 
-      <button id="themeToggle" class="theme-toggle">
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Toggle dark and light mode"
+        title="Toggle theme"
+      >
+        <i data-lucide="moon"></i>
         <span id="themeLabel">Dark Mode</span>
       </button>
     </div>
   </header>
 
-  <!-- Hero -->
-  <main class="hero container">
-    <h1>My Portfolio (Assignment 3)</h1>
-    <p id="greeting"></p>
+  <!-- ===== Hero ===== -->
+  <main id="home" class="hero reveal">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <p class="hero-kicker">
+          <span class="badge">
+            <i data-lucide="sparkles"></i>
+            Portfolio Assignment 3
+          </span>
+        </p>
 
-    <div class="visitor-box">
-      <input type="text" id="visitorName" placeholder="Enter your name">
-      <button id="saveName">Save</button>
-      <p id="welcomeUser"></p>
+        <h1 class="hero-title">
+          Building clean, responsive <span class="accent">web experiences</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Junior Software Engineering Student focused on HTML, CSS, JavaScript and modern interactive UI.
+          This portfolio was upgraded in Phase 3 with API integration, stronger logic, state management,
+          and performance improvements.
+        </p>
+
+        <p id="greeting" class="greeting"></p>
+
+        <div class="hero-actions">
+          <a class="btn" href="#projects">
+            <i data-lucide="layout-grid"></i>
+            View Projects
+          </a>
+
+          <a class="btn btn-outline" href="#github">
+            <i data-lucide="github"></i>
+            Live GitHub Data
+          </a>
+        </div>
+
+        <!-- Visitor State Management -->
+        <div class="visitor-panel">
+          <h3 class="mini-title">Personalize Your Visit</h3>
+          <p class="mini-text">
+            Enter your name and the site will remember it the next time you open the page.
+          </p>
+
+          <div class="visitor-form">
+            <input
+              id="visitorName"
+              type="text"
+              placeholder="Enter your name"
+              aria-label="Visitor name"
+            />
+            <button id="saveVisitorBtn" class="btn btn-small" type="button">
+              <i data-lucide="save"></i>
+              Save Name
+            </button>
+            <button id="clearVisitorBtn" class="btn btn-outline btn-small" type="button">
+              <i data-lucide="rotate-ccw"></i>
+              Clear
+            </button>
+          </div>
+
+          <p id="visitorMessage" class="visitor-message" aria-live="polite"></p>
+        </div>
+
+        <!-- Timer / Counter -->
+        <div class="hero-stats">
+          <div class="stat-card">
+            <i data-lucide="clock-3"></i>
+            <div>
+              <p class="stat-label">Time on Site</p>
+              <p id="timeCounter" class="stat-value">0s</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <i data-lucide="monitor-smartphone"></i>
+            <div>
+              <p class="stat-label">Mode</p>
+              <p id="themeStatusText" class="stat-value">Dark</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <img
+          src="assets/images/Mohammed.JPG"
+          alt="Mohammed Alshammasi"
+          class="profile-img"
+          loading="eager"
+        >
+      </div>
     </div>
-
-    <p id="timer"></p>
   </main>
 
-  <!-- Projects -->
-  <section id="projects" class="container">
-    <h2>Projects</h2>
+  <!-- ===== About ===== -->
+  <section id="about" class="section reveal">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <p class="section-subtitle">
+        A short professional introduction.
+      </p>
 
-    <div>
-      <select id="categoryFilter">
-        <option value="all">All</option>
-        <option value="ui">UI</option>
-        <option value="web">Web</option>
-        <option value="mobile">Mobile</option>
-      </select>
-
-      <select id="sortProjects">
-        <option value="default">Default</option>
-        <option value="title">Sort by Title</option>
-      </select>
-    </div>
-
-    <div id="projectsGrid">
-      <div class="project" data-category="ui">UI Project</div>
-      <div class="project" data-category="web">Web App</div>
-      <div class="project" data-category="mobile">Mobile App</div>
+      <p class="text">
+        I’m Mohammed Alshammasi, a junior Software Engineering student. I enjoy building
+        structured, responsive websites and improving my skills in frontend and backend development.
+        I also like turning simple interfaces into cleaner and more interactive user experiences.
+      </p>
     </div>
   </section>
 
-  <!-- GitHub API -->
-  <section id="github" class="container">
-    <h2>My GitHub Repositories</h2>
-    <div id="repoList">Loading...</div>
+  <!-- ===== Why Choose Me ===== -->
+  <section id="highlights" class="section reveal">
+    <div class="container">
+      <h2 class="section-title">Why Choose Me</h2>
+      <p class="section-subtitle">
+        I focus on clarity, responsiveness, and writing code that’s easy to maintain.
+      </p>
+
+      <div class="feature-list">
+        <article class="feature-item">
+          <div class="feature-icon">
+            <i data-lucide="smartphone"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Responsive Design</h3>
+            <p class="feature-text">
+              Layouts that adapt smoothly across mobile, tablet, and desktop using Flexbox and Grid.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-item">
+          <div class="feature-icon">
+            <i data-lucide="code-2"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Clean Structure</h3>
+            <p class="feature-text">
+              Organized folders, readable HTML, and clear styling conventions for maintainability.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-item">
+          <div class="feature-icon">
+            <i data-lucide="rocket"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Continuous Improvement</h3>
+            <p class="feature-text">
+              I learn by building projects, applying feedback, and improving the UI and workflow.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-item">
+          <div class="feature-icon">
+            <i data-lucide="file-text"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Documentation Mindset</h3>
+            <p class="feature-text">
+              I document decisions and usage clearly to keep projects understandable and professional.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact" class="container">
-    <h2>Contact</h2>
+  <!-- ===== Projects ===== -->
+  <section id="projects" class="section reveal">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-subtitle">
+        A selection of work built to strengthen my web development skills.
+      </p>
 
-    <form id="contactForm">
-      <input id="name" placeholder="Name">
-      <small id="nameError"></small>
+      <!-- Phase 3: advanced controls -->
+      <div class="project-controls">
+        <div class="filter-bar" role="group" aria-label="Project filters">
+          <button class="filter-btn active" type="button" data-filter="all">All</button>
+          <button class="filter-btn" type="button" data-filter="ui">UI</button>
+          <button class="filter-btn" type="button" data-filter="web">Web App</button>
+          <button class="filter-btn" type="button" data-filter="mobile">Mobile</button>
+        </div>
 
-      <input id="email" placeholder="Email">
-      <small id="emailError"></small>
+        <div class="sort-controls">
+          <div class="control-group">
+            <label for="sortProjects">Sort By</label>
+            <select id="sortProjects">
+              <option value="default">Default Order</option>
+              <option value="title-asc">Title (A-Z)</option>
+              <option value="title-desc">Title (Z-A)</option>
+            </select>
+          </div>
 
-      <textarea id="message" placeholder="Message"></textarea>
-      <small id="messageError"></small>
+          <div class="control-group">
+            <label for="skillLevel">Visitor Level</label>
+            <select id="skillLevel">
+              <option value="all">Show All</option>
+              <option value="beginner">Beginner Friendly</option>
+              <option value="advanced">Advanced Focus</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-      <button type="submit">Send</button>
-      <p id="formStatus"></p>
-    </form>
+      <p id="filterStatus" class="filter-status" aria-live="polite">
+        Showing all projects.
+      </p>
+
+      <div class="projects-grid" id="projectsGrid">
+        <article
+          class="project-card reveal-card"
+          data-category="ui"
+          data-level="beginner"
+          data-title="Next.js Hero Section"
+        >
+          <div class="project-image">
+            <img
+              src="assets/images/p1.jpg"
+              alt="Next.js Hero Section UI"
+              class="project-img"
+              loading="lazy"
+            />
+            <a class="project-arrow" href="#" aria-label="Open project">
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </div>
+
+          <div class="project-body">
+            <p class="project-tag">UI / Landing</p>
+            <h3 class="project-title">Next.js Hero Section</h3>
+            <p class="project-desc">
+              A modern hero section design with strong typography and a dark gradient style.
+            </p>
+
+            <p class="project-level">
+              <i data-lucide="graduation-cap"></i>
+              Beginner Friendly
+            </p>
+
+            <div class="project-actions">
+              <a class="project-link" href="#" target="_blank" rel="noopener">
+                <i data-lucide="external-link"></i>
+                View
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="project-card reveal-card"
+          data-category="web"
+          data-level="advanced"
+          data-title="Horse Race Portal"
+        >
+          <div class="project-image">
+            <img
+              src="assets/images/p2.jpg"
+              alt="Horse Race Web Portal UI"
+              class="project-img"
+              loading="lazy"
+            />
+            <a class="project-arrow" href="#" aria-label="Open project">
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </div>
+
+          <div class="project-body">
+            <p class="project-tag">Web App</p>
+            <h3 class="project-title">Horse Race Portal</h3>
+            <p class="project-desc">
+              A web portal interface featuring navigation, hero layout, and a themed visual grid background.
+            </p>
+
+            <p class="project-level">
+              <i data-lucide="cpu"></i>
+              Advanced Focus
+            </p>
+
+            <div class="project-actions">
+              <a class="project-link" href="#" target="_blank" rel="noopener">
+                <i data-lucide="github"></i>
+                View
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="project-card reveal-card"
+          data-category="mobile"
+          data-level="beginner"
+          data-title="Card Slider UI"
+        >
+          <div class="project-image">
+            <img
+              src="assets/images/p3.jpg"
+              alt="Mobile UI Card Slider Design"
+              class="project-img"
+              loading="lazy"
+            />
+            <a class="project-arrow" href="#" aria-label="Open project">
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </div>
+
+          <div class="project-body">
+            <p class="project-tag">Mobile UI</p>
+            <h3 class="project-title">Card Slider UI</h3>
+            <p class="project-desc">
+              A mobile-style UI concept with a card slider layout and clean spacing for a modern app feel.
+            </p>
+
+            <p class="project-level">
+              <i data-lucide="graduation-cap"></i>
+              Beginner Friendly
+            </p>
+
+            <div class="project-actions">
+              <a class="project-link" href="#" target="_blank" rel="noopener">
+                <i data-lucide="external-link"></i>
+                View
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p id="emptyState" class="empty-state hidden" aria-live="polite">
+        No projects found for the selected options.
+      </p>
+    </div>
   </section>
+
+  <!-- ===== GitHub API Section ===== -->
+  <section id="github" class="section reveal">
+    <div class="container">
+      <h2 class="section-title">GitHub Repositories</h2>
+      <p class="section-subtitle">
+        This section fetches live repository data using the GitHub API to make the portfolio more dynamic and up to date.
+      </p>
+
+      <div class="github-header">
+        <div class="github-profile">
+          <i data-lucide="github"></i>
+          <div>
+            <p class="github-label">GitHub Username</p>
+            <h3 class="github-name">mohammedDev11</h3>
+          </div>
+        </div>
+
+        <button id="reloadReposBtn" class="btn btn-outline" type="button">
+          <i data-lucide="refresh-cw"></i>
+          Reload Repositories
+        </button>
+      </div>
+
+      <p id="repoStatus" class="repo-status" aria-live="polite">
+        Loading repositories...
+      </p>
+
+      <div id="repoList" class="repo-grid">
+        <!-- GitHub repos will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact" class="section reveal">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-subtitle">
+        Send a message using this demo form.
+      </p>
+
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" />
+          <small class="field-error" id="nameError"></small>
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="your@email.com" />
+          <small class="field-error" id="emailError"></small>
+        </div>
+
+        <div class="form-row">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Write your message..."></textarea>
+          <small class="field-error" id="messageError"></small>
+        </div>
+
+        <div class="form-check">
+          <input id="agreeTerms" name="agreeTerms" type="checkbox" />
+          <label for="agreeTerms" class="checkbox-label">
+            I confirm that the information entered is valid.
+          </label>
+        </div>
+        <small class="field-error" id="agreeTermsError"></small>
+
+        <button class="btn" type="submit" id="submitBtn">
+          <i data-lucide="send"></i>
+          Send Message
+        </button>
+
+        <p id="formStatus" class="form-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Mohammed Alshammasi — Assignment 3</p>
+    </div>
+  </footer>
 
   <script src="js/script.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
